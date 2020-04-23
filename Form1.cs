@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,14 +20,23 @@ namespace CefSharpBrowserNodeJS
             InitializeComponent();
         }
 
-        ChromiumWebBrowser brower;
+        ChromiumWebBrowser browser;
         private void Form1_Load(object sender, EventArgs e)
         {
             CefSettings browserSettings = new CefSettings();
             Cef.Initialize(browserSettings);
-            brower = new ChromiumWebBrowser("https://www.google.com");
-            this.pContainer.Controls.Add(brower);
-            brower.Dock = DockStyle.Fill;
+            browser = new ChromiumWebBrowser("http://localhost:3000/");
+            browser.Dock = DockStyle.Fill;
+            browser.JavascriptObjectRepository.Register("boundAsync", new BoundObject(), true);
+            this.pContainer.Controls.Add(browser);
+        }
+
+        public class BoundObject
+        {
+            public int Add(int a, int b)
+            {
+                return a + b;
+            }
         }
     }
 }
